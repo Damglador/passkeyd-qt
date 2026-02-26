@@ -1,0 +1,23 @@
+[package]
+name = "passkeyd-select"
+version = "0.1.0"
+authors = [ "Damglador" ]
+edition = "2024"
+license = "GPLv3"
+
+[dependencies]
+cxx = "1.0.95"
+cxx-qt = "0.8.1"
+cxx-qt-lib = { version="0.8.1", features = ["qt_full"] }
+cxx-qt-lib-extras = "0.8.1"
+
+bytes.workspace = true
+serde.workspace = true
+ctap-types.workspace = true
+pam.workspace = true
+whoami = "2.1.1"
+zeroize = "1.8.2"
+
+[build-dependencies]
+# The link_qt_object_files feature is required for statically linking Qt 6.
+cxx-qt-build = { version = "0.8.1", features = [ "link_qt_object_files" ] }
