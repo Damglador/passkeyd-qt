@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import org.kde.kirigami as Kirigami
+import project
 
 Kirigami.ApplicationWindow {
   id: root
@@ -18,6 +19,10 @@ Kirigami.ApplicationWindow {
 
   flags: Qt.WindowStaysOnTopHint
   title: "Create Passkey"
+
+  MyQObject {
+      id: myQObject
+  }
 
   pageStack.initialPage: Kirigami.Page {
     id: mainPage
@@ -80,6 +85,8 @@ Kirigami.ApplicationWindow {
         standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
         onAccepted: {
           // TODO: Register passkey
+          myQObject.authorize()
+          Qt.quit()
         }
         onRejected: {
           Qt.quit()
