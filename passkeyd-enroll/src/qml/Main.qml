@@ -23,7 +23,9 @@ Kirigami.ApplicationWindow {
   MyQObject {
       id: myQObject
   }
-
+  onBeforeRendering: {
+    myQObject.load_data()
+  }
   pageStack.initialPage: Kirigami.Page {
     id: mainPage
     width: parent.width
@@ -34,17 +36,17 @@ Kirigami.ApplicationWindow {
       width: parent.width
       height: parent.height
       Label {
-        // TODO: Set this text from code with different variables
+        id: descriptionLbl
         Layout.maximumWidth: parent.width
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-        text: "<website> wants to create a passkey for your user account <username>."
+        text: myQObject.domain + " wants to create a passkey for your user account " + myQObject.username
         font.bold: true
       }
       Rectangle {
         id: userCard
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter
-        implicitWidth:  cardLayout.width + Kirigami.Units.gridUnit * 5
+        implicitWidth:  cardLayout.width  + Kirigami.Units.gridUnit * 5
         implicitHeight: cardLayout.height + Kirigami.Units.gridUnit * 1
         radius: 12
         color: Kirigami.Theme.activeBackgroundColor
@@ -67,15 +69,13 @@ Kirigami.ApplicationWindow {
             fallback: "user-identity"
           }
           ColumnLayout {
-            id: websitenameLbl
             Label {
-              // TODO: use the actual website name
-              text: "GitHub"
+              id: websitenameLbl
+              text: myQObject.domain
             }
             Label {
-              // TODO: use the actual user name
               id: usernameLbl
-              text: "Damglador"
+              text: myQObject.username
             }
           }
         }//RowLayout
