@@ -8,7 +8,7 @@ Kirigami.ApplicationWindow {
   id: root
 
   width: Kirigami.Units.gridUnit * 20
-  height: Kirigami.Units.gridUnit * 10
+  height: Kirigami.Units.gridUnit * 12
 
   // The order matters apparently
   maximumHeight: height
@@ -32,12 +32,14 @@ Kirigami.ApplicationWindow {
     height: parent.height
     globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
     ColumnLayout {
+      id: mainLayout
       Layout.margins: Kirigami.Units.largeSpacing
       width: parent.width
       height: parent.height
       Label {
         id: descriptionLbl
         Layout.maximumWidth: parent.width
+        Layout.maximumHeight: Kirigami.Units.gridUnit * 3
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         text: myQObject.domain + " wants to create a passkey for your user account " + myQObject.username
         font.bold: true
@@ -82,6 +84,7 @@ Kirigami.ApplicationWindow {
       }
 
       DialogButtonBox {
+        Layout.alignment: Qt.AlignBottom
         standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
         onAccepted: {
           // TODO: Register passkey
