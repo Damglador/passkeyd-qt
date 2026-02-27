@@ -122,3 +122,64 @@ fn main() -> ExitCode {
     return ExitCode::FAILURE;
   }
 }
+
+#[cfg(test)]
+mod tests {
+
+    use std::{io::Write, process::Stdio};
+
+    use ctap_types::serde::cbor_serialize;
+
+    use super::*;
+
+    #[test]
+    fn test() {
+        let mut bufferrrr = [0; 10000];
+        let otherui = OtherUI {
+            site_icon: None,
+            user_icon: None,
+            user: ctap_types::webauthn::PublicKeyCredentialUserEntity {
+                id: ctap_types::Bytes::from_slice(&[1u8; 64]).expect(""),
+                icon: None,
+                name: Some("test".into()),
+                display_name: Some("Damglador".into()),
+            },
+        };
+
+        let values = AuthorizationData {
+            other_ui: otherui,
+            rp: PublicKeyCredentialRpEntity {
+                id: "github.com".into(),
+                name: Some("GitHub".into()),
+                icon: None,
+            },
+        };
+        let x = cbor_serialize(&values, &mut bufferrrr[..]).expect("");
+
+        // debug!("spawning ui");
+        let mut command = std::process::Command::new("systemd-run")
+            .arg(format!("--machine={}@", 1000))
+            .arg("--user")
+            .arg("--collect")
+            .arg("--wait")
+            .arg("--quiet")
+            .arg("--pipe")
+            // .env("SYSTEMD_LOG_LEVEL", "debug")
+            .arg(format!(
+                "/home/damglador/kirigami-rust/target/debug/{}",
+                "passkeyd-enroll"
+            ))
+            // .arg("/usr/lib/passkeyd/passkeyd-enroll")
+            .stdin(Stdio::piped())
+            .spawn()
+            .expect("Failed to spawn UI, are you root?");
+
+        {
+            let mut stdin = command.stdin.take().expect("Failed to get stdin");
+            stdin.write_all(&x).expect("Failed to write into pipe");
+        }
+        let result = command.wait().expect("failed to collect ui response");
+        let g = result.code().unwrap_or(1);
+        assert_eq!(g, 0)
+    }
+}
