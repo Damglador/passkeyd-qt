@@ -86,7 +86,7 @@ impl ffi::MyQObject {
   }
 }
 
-fn getinput() -> AuthorizationData {
+fn getdata() -> AuthorizationData {
     let mut state_buffer = Vec::with_capacity(size_of::<AuthorizationData>());
     std::io::stdin()
         .read_to_end(&mut state_buffer)
@@ -96,7 +96,7 @@ fn getinput() -> AuthorizationData {
 
 fn main() -> ExitCode {
 
-  let auth_data = getinput();
+  let auth_data = getdata();
   *PENDING.lock().unwrap() = Some(auth_data);
 
 
