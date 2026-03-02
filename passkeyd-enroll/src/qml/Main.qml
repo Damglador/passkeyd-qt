@@ -8,7 +8,7 @@ Kirigami.ApplicationWindow {
   id: root
 
   width: Kirigami.Units.gridUnit * 20
-  height: Kirigami.Units.gridUnit * 12
+  height: Kirigami.Units.gridUnit * 11
 
   // The order matters apparently
   maximumHeight: height
@@ -26,76 +26,69 @@ Kirigami.ApplicationWindow {
   onBeforeRendering: {
     myQObject.load_data()
   }
-  pageStack.initialPage: Kirigami.Page {
-    id: mainPage
-    width: parent.width
-    height: parent.height
-    globalToolBarStyle: Kirigami.ApplicationHeaderStyle.None
-    ColumnLayout {
-      id: mainLayout
-      Layout.margins: Kirigami.Units.largeSpacing
-      width: parent.width
-      height: parent.height
-      Label {
-        id: descriptionLbl
-        Layout.maximumWidth: parent.width
-        Layout.maximumHeight: Kirigami.Units.gridUnit * 3
-        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-        text: myQObject.domain + " wants to create a passkey for your user account " + myQObject.username
-        font.bold: true
-      }
-      Rectangle {
-        id: userCard
-        Layout.fillWidth: true
-        Layout.alignment: Qt.AlignHCenter
-        implicitWidth:  cardLayout.width  + Kirigami.Units.gridUnit * 5
-        implicitHeight: cardLayout.height + Kirigami.Units.gridUnit * 1
-        radius: 12
-        color: Kirigami.Theme.activeBackgroundColor
-        border.color: Kirigami.Theme.focusColor
-        border.width: 1
-        RowLayout {
-          anchors {
-            left: parent.left
-            verticalCenter: parent.verticalCenter
-            leftMargin: Kirigami.Units.mediumSpacing
-            topMargin: Kirigami.Units.mediumSpacing
-          }
+  ColumnLayout {
+    id: mainLayout
+    anchors.fill: parent
+    anchors.margins: Kirigami.Units.largeSpacing
 
-          id: cardLayout
-          Kirigami.Icon {
-            implicitHeight: Kirigami.Units.iconSizes.large
-            implicitWidth: Kirigami.Units.iconSizes.large
-            // TODO: use the actual website icon
-            source: "github"
-            fallback: "user-identity"
+    Kirigami.SelectableLabel {
+      id: descriptionLbl
+      Layout.fillWidth: true
+      Layout.alignment: Qt.AlignHCenter
+      Layout.maximumHeight: Kirigami.Units.gridUnit * 3
+      wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+      text: myQObject.domain + " wants to create a passkey for your user account " + myQObject.username + "."
+      font.bold: true
+    }
+    Rectangle {
+      id: userCard
+      implicitWidth: parent.width - Kirigami.Units.gridUnit * 3
+      implicitHeight: cardLayout.height + Kirigami.Units.gridUnit * 1
+      Layout.alignment: Qt.AlignHCenter
+      radius: 12
+      color: Kirigami.Theme.activeBackgroundColor
+      border.color: Kirigami.Theme.focusColor
+      border.width: 1
+      RowLayout {
+        anchors {
+          left: parent.left
+          verticalCenter: parent.verticalCenter
+          leftMargin: Kirigami.Units.mediumSpacing
+          topMargin: Kirigami.Units.mediumSpacing
+        }
+        id: cardLayout
+        Kirigami.Icon {
+          implicitHeight: Kirigami.Units.iconSizes.large
+          implicitWidth: Kirigami.Units.iconSizes.large
+          // TODO: use the actual website icon
+          source: "github"
+          fallback: "user-identity"
+        }
+        ColumnLayout {
+          Label {
+            id: websitenameLbl
+            text: myQObject.domain
           }
-          ColumnLayout {
-            Label {
-              id: websitenameLbl
-              text: myQObject.domain
-            }
-            Label {
-              id: usernameLbl
-              text: myQObject.username
-            }
+          Label {
+            id: usernameLbl
+            text: myQObject.username
           }
-        }//RowLayout
+        }
+      }//RowLayout
+    }
+    DialogButtonBox {
+      Layout.margins: -parent.anchors.margins
+      Layout.alignment: Qt.AlignBottom
+      standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
+      onAccepted: {
+        // TODO: Register passkey
+        myQObject.authorize()
+        Qt.quit()
       }
-
-      DialogButtonBox {
-        Layout.alignment: Qt.AlignBottom
-        standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
-        onAccepted: {
-          // TODO: Register passkey
-          myQObject.authorize()
-          Qt.quit()
-        }
-        onRejected: {
-          Qt.quit()
-        }
-        Layout.fillWidth: true
-      }//DialogButtonBox
-    }//ColumnLayout
-  }//Kirigami.Page
+      onRejected: {
+        Qt.quit()
+      }
+      Layout.fillWidth: true
+    }//DialogButtonBox
+  }//ColumnLayout
 }//Kirigami.ApplicationWindow
