@@ -17,7 +17,7 @@ fn main() {
   let mut app = QApplication::new();
   let mut engine = QQmlApplicationEngine::new();
   // To associate the executable to the installed desktop file
-  QGuiApplication::set_desktop_file_name(&QString::from("passkeyd-select"));
+  QGuiApplication::set_desktop_file_name(&QString::from("passkeyd"));
   // To ensure the style is set correctly
   let style = env::var("QT_QUICK_CONTROLS_STYLE");
   if style.is_err() {
