@@ -1,10 +1,11 @@
 pragma ComponentBehavior: Bound
 
-
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import org.kde.kirigami as Kirigami
+
+import io.qt.textproperties 1.0
 
 Kirigami.ApplicationWindow {
   id: root
@@ -24,17 +25,14 @@ Kirigami.ApplicationWindow {
 
   pageStack.initialPage: selectionPage
 
+  Bridge {
+     id: bridge
+  }
+
   Component {
     id: selectionPage
     Kirigami.Page {
-      // TODO: set website name
-      title: "Select passkey for <website>"
-      ListModel {
-        id: itemModel
-        ListElement { user: "Damglador"; domain: "github.com"; website_icon: "github.com" }
-        ListElement { user: "Amongus"; domain: "theuselessweb.com"; website_icon: "github.com" }
-        ListElement { user: "Konqi"; domain: "gitlab.com"; website_icon: "github.com" }
-      }
+      title: bridge.getLabel()
       ColumnLayout {
         id: layout
         anchors.fill: parent
@@ -49,7 +47,6 @@ Kirigami.ApplicationWindow {
             height: parent.height
             anchors.right: parent.right
           }
-          // ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
           ListView {
             id: optionsList
@@ -65,8 +62,8 @@ Kirigami.ApplicationWindow {
               id: item
               required property int index
               required property string user
-              required property string domain
-              required property string website_icon
+              // required property string domain
+              // required property string website_icon
 
               width: ListView.view.width - scrollBar.width
               height: Kirigami.Units.gridUnit * 2.5
@@ -74,35 +71,43 @@ Kirigami.ApplicationWindow {
               RowLayout {
 
                 Kirigami.Icon {
-                  source: item.website_icon
+                  source: "user-identity" // item.website_icon
                   fallback: "user-identity"
                   Layout.preferredWidth: Kirigami.Units.iconSizes.large
                   Layout.preferredHeight: Kirigami.Units.iconSizes.large
                 }
 
                 RowLayout {
-                  layoutDirection: Qt.LeftToRight
-                  Layout.alignment: Qt.AlignLeft
                   spacing: Kirigami.Units.smallSpacing
 
                   Label {
                     text: item.user
                   }
-                  Label {
-                    text: "at"
-                  }
-                  Label {
-                    text: item.domain
-                  }
+                  // Label {
+                  //   text: "at"
+                  // }
+                  // Label {
+                  //   text: item.domain
+                  // }
                 }//RowLayout
               }//RowLayout
               onClicked: {
-                root.pageStack.push(authorizePage)
                 parent.currentIndex = index
-
-                console.log(index)
+                bridge.saveIndex(parent.currentIndex)
+                root.pageStack.push(authorizePage)
               }
+              Keys.onReturnPressed: clicked()
             }//ItemDelegate
+
+            Component.onCompleted: {
+              forceActiveFocus()
+              if (count == 1) {
+                Qt.callLater(() => {
+                  if (currentItem)
+                    currentItem.clicked()   // або твій метод активації
+                })
+              }
+            }//Component.onCompleted
           }//ListView
 
         }//Scrollview
@@ -147,7 +152,10 @@ Kirigami.ApplicationWindow {
               id: passwordField
               Layout.fillWidth: true
               onAccepted: {
-                // TODO: Check password
+                let result = bridge.authorize(passwordField.text)
+                if (!result) {
+                  errorMessage.visible = true
+                }
               }
             }
           }//ColumnLayout
@@ -163,7 +171,6 @@ Kirigami.ApplicationWindow {
           text: "Invalid password. Try again."
           showCloseButton: true
           Layout.fillWidth: true
-          // TODO: Show if password is invalid
           onVisibleChanged: {
             if (visible) {
               root.height += Kirigami.Units.gridUnit * 2
@@ -174,10 +181,11 @@ Kirigami.ApplicationWindow {
         }//Kirigami.InlineMessage
         DialogButtonBox {
           standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
-
           onAccepted: {
-            errorMessage.visible = true
-            // TODO: Check password
+            let result = bridge.authorize(passwordField.text)
+            if (!result) {
+              errorMessage.visible = true
+            }
           }
           onRejected: {
             Qt.quit()
