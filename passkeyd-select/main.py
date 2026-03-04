@@ -13,7 +13,7 @@ from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtCore import Property, QAbstractListModel, QByteArray, QLoggingCategory, QObject, Signal, Slot
 from PySide6.QtQml import QQmlApplicationEngine, QmlElement
 
-QML_IMPORT_NAME = "io.qt.textproperties"
+QML_IMPORT_NAME = "passkeyd_select"
 QML_IMPORT_MAJOR_VERSION = 1
 
 class PublicKeyCredentialRpEntity(BaseModel):

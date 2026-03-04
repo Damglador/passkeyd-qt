@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import org.kde.kirigami as Kirigami
-import project
+import passkeyd_enroll
 
 Kirigami.ApplicationWindow {
   id: root

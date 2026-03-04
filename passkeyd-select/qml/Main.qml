@@ -5,7 +5,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import org.kde.kirigami as Kirigami
 
-import io.qt.textproperties 1.0
+import passkeyd_select
 
 Kirigami.ApplicationWindow {
   id: root
