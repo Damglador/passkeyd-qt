@@ -34,6 +34,10 @@ class InputData(BaseModel):
   rp: PublicKeyCredentialRpEntity
   other_uis: list[Entry]
 
+class SelectionResponse(BaseModel):
+  index: int
+  passphrase: str
+
 saved_index: int
 saved_data:  InputData
 
@@ -88,7 +92,7 @@ class Bridge(QObject):
   @Slot(str, result=bool)
   def authorize(self, password: str):
     if pam.authenticate(getpass.getuser(), password):
-      write_output(bytearray(password, "utf-8"))
+      write_output(password)
       return True
     else:
       return False
@@ -104,17 +108,19 @@ class Bridge(QObject):
     self._websiteDomain = saved_data.rp.id   if saved_data.rp.id   else ""
     self.labelTextChanged.emit()
 
-def write_output(password: bytearray):
+def write_output(password: str):
   stdout = sys.stdout.buffer
-
   stdout.write(b'\x02')
-  stdout.write(saved_index.to_bytes(8, 'little'))
-  stdout.write(password)
-  stdout.write(b'\x03')
+  global saved_index
+  report = cbor2.dumps(
+    SelectionResponse(
+      index=saved_index,
+      passphrase=password
+    ).model_dump())
+  stdout.write(report)
   stdout.flush()
 
-  for i in range(len(password)):
-    password[i] = 0
+  password = ""
   QGuiApplication.exit(0)
 
 def getdata():
