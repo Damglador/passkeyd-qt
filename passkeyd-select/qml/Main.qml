@@ -27,12 +27,13 @@ Kirigami.ApplicationWindow {
 
   Bridge {
      id: bridge
+     Component.onCompleted: load_data()
   }
 
   Component {
     id: selectionPage
     Kirigami.Page {
-      title: bridge.getLabel()
+      title: bridge.labelText
       ColumnLayout {
         id: layout
         anchors.fill: parent
