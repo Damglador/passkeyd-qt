@@ -1,0 +1,11 @@
+[project]
+name = "passkeyd-enroll"
+version = "0.1.0"
+description = "Add your description here"
+license = "GPLv3"
+requires-python = ">=3.14"
+dependencies = [
+  "pydantic",
+  "pyside6",
+  "cbor2",
+]

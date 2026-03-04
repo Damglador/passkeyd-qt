@@ -159,7 +159,7 @@ def main():
   engine.addImportPath(scriptdir)
   engine.loadFromModule("qml", "Main")
 
-  app.exec()
+  sys.exit(app.exec())
 
 if __name__ == "__main__":
   try:
