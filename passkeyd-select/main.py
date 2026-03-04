@@ -15,7 +15,6 @@ from PySide6.QtQml import QQmlApplicationEngine, QmlElement
 
 QML_IMPORT_NAME = "io.qt.textproperties"
 QML_IMPORT_MAJOR_VERSION = 1
-os.environ["QT_LOGGING_RULES"] = "qml=false"
 
 class PublicKeyCredentialRpEntity(BaseModel):
   id: str | None = None
@@ -48,10 +47,10 @@ class ItemModel(QAbstractListModel):
     super().__init__()
     self._items = items or []
 
-  def rowCount(self, parent): # pyright: ignore[ reportIncompatibleMethodOverride]
+  def rowCount(self, parent): # pyright: ignore[reportIncompatibleMethodOverride]
     return len(self._items)
 
-  def data(self, index, role): # pyright: ignore[ reportIncompatibleMethodOverride]
+  def data(self, index, role): # pyright: ignore[reportIncompatibleMethodOverride]
     if not index.isValid():
       return ""
 
@@ -65,11 +64,6 @@ class ItemModel(QAbstractListModel):
     return {
       self.UserRole: QByteArray(b"user"),
     }
-
-  def setUsers(self, users):
-    self.beginResetModel()
-    self._users = users
-    self.endResetModel()
 
 @QmlElement
 class Bridge(QObject):
