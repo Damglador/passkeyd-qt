@@ -164,4 +164,9 @@ def main():
   app.exec()
 
 if __name__ == "__main__":
-  main()
+  try:
+    main()
+  except KeyboardInterrupt:
+    exit(1)
+  except Exception as err:
+    print(err, file=sys.stderr)
