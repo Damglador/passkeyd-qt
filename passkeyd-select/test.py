@@ -49,8 +49,8 @@ def test():
     ]
 
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
-    proc.stdin.write(serialized_data)
-    proc.stdin.close()
+    proc.stdin.write(serialized_data) # pyright: ignore[reportOptionalMemberAccess]
+    proc.stdin.close()                # pyright: ignore[reportOptionalMemberAccess]
     proc.wait()
 
 if __name__ == "__main__":
