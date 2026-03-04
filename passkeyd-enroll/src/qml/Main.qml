@@ -20,8 +20,8 @@ Kirigami.ApplicationWindow {
   flags: Qt.WindowStaysOnTopHint
   title: "Create Passkey"
 
-  MyQObject {
-      id: myQObject
+  Bridge {
+      id: bridge
       Component.onCompleted: load_data()
   }
   ColumnLayout {
@@ -35,7 +35,7 @@ Kirigami.ApplicationWindow {
       Layout.alignment: Qt.AlignHCenter
       Layout.maximumHeight: Kirigami.Units.gridUnit * 3
       wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-      text: myQObject.domain + " wants to create a passkey for your user account " + myQObject.username + "."
+      text: bridge.domain + " wants to create a passkey for your user account " + bridge.username + "."
       font.bold: true
     }
     Rectangle {
@@ -65,11 +65,11 @@ Kirigami.ApplicationWindow {
         ColumnLayout {
           Label {
             id: websitenameLbl
-            text: myQObject.domain
+            text: bridge.domain
           }
           Label {
             id: usernameLbl
-            text: myQObject.username
+            text: bridge.username
           }
         }
       }//RowLayout
@@ -80,7 +80,7 @@ Kirigami.ApplicationWindow {
       standardButtons: DialogButtonBox.Ok | DialogButtonBox.Cancel
       onAccepted: {
         // TODO: Register passkey
-        myQObject.authorize()
+        bridge.authorize()
         Qt.quit()
       }
       onRejected: {

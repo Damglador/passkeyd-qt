@@ -41,13 +41,13 @@ mod ffi {
     #[qproperty(QString, username)]
     #[qproperty(QString, domain)]
     #[qproperty(QString, icon)]
-    type MyQObject = super::QRustStruct;
+    type Bridge = super::QRustStruct;
 
     #[qinvokable]
-    fn authorize(self: Pin<&mut MyQObject>);
+    fn authorize(self: Pin<&mut Bridge>);
 
     #[qinvokable]
-    fn load_data(self: Pin<&mut MyQObject>);
+    fn load_data(self: Pin<&mut Bridge>);
   }
 }
 
@@ -58,7 +58,7 @@ pub struct QRustStruct {
   icon: QString,
 }
 
-impl ffi::MyQObject {
+impl ffi::Bridge {
   fn authorize(self: Pin<&mut Self>) {
     IS_AUTHORIZED.store(true, std::sync::atomic::Ordering::SeqCst);
   }
