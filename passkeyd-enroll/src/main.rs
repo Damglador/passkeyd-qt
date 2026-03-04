@@ -110,7 +110,7 @@ fn main() -> ExitCode {
       QQuickStyle::set_style(&QString::from("org.kde.desktop"));
   }
   if let Some(engine) = engine.as_mut() {
-      engine.load(&QUrl::from("qrc:/qt/qml/project/src/qml/Main.qml"));
+      engine.load(&QUrl::from("qrc:/qt/qml/passkeyd_enroll/src/qml/Main.qml"));
   }
   if let Some(app) = app.as_mut() {
       app.exec();
