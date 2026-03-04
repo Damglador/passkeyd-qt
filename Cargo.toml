@@ -1,7 +1,6 @@
 [workspace]
 members = [
     "passkeyd-enroll",
-    "passkeyd-select",
     ]
 resolver = "3"
 
