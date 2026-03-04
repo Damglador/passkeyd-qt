@@ -22,9 +22,7 @@ Kirigami.ApplicationWindow {
 
   MyQObject {
       id: myQObject
-  }
-  onBeforeRendering: {
-    myQObject.load_data()
+      Component.onCompleted: load_data()
   }
   ColumnLayout {
     id: mainLayout
