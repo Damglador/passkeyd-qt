@@ -37,7 +37,6 @@ class InputData(BaseModel):
 saved_index: int
 saved_data:  InputData
 
-QAbstractListModel.data
 class ItemModel(QAbstractListModel):
   UserRole = 0x0100 + 1
   # DomainRole = 0x0100 + 2
@@ -126,7 +125,6 @@ def getdata():
 
   global saved_data
   saved_data = InputData(**cbor2.loads(state_buffer))
-
 
 def main():
   app = QGuiApplication(sys.argv)
